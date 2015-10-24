@@ -13,10 +13,10 @@ templatekey: Azure Deployment
 field: {99518902-33BC-46DB-9BE6-659AC446BF34}
 name: Service Definition
 key: service definition
-content-length: 2040
+content-length: 2620
 
 <?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="SitecoreCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2013-10.2.2">
+<ServiceDefinition name="SitecoreCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
   <WebRole name="SitecoreWebRole" enableNativeCodeExecution="false" vmsize="Medium" >
     <ConfigurationSettings>
       <Setting name="StorageName"/>
@@ -25,7 +25,6 @@ content-length: 2040
     </ConfigurationSettings>
     <Imports>
       <Import moduleName="Diagnostics" />
-      <Import moduleName="Caching" />
     </Imports>
     <Endpoints>
       <InputEndpoint name="HttpIn" protocol="http" port="80" />
@@ -36,6 +35,7 @@ cleanOnRecycle should be false cause it causes some file locks during role recyc
 -->
       <LocalStorage name="DiagnosticStore" sizeInMB="10240" cleanOnRoleRecycle="false" />
       <LocalStorage name="SitecoreWebSite" sizeInMB="102400" cleanOnRoleRecycle="false" />
+      <LocalStorage name="Temp" sizeInMB="102400" cleanOnRoleRecycle="true" />
     </LocalResources>
     <Runtime executionContext="elevated">
       <EntryPoint>
@@ -63,22 +63,43 @@ cleanOnRecycle should be false cause it causes some file locks during role recyc
       </Task>
     </Startup>
   </WebRole>
+    <WorkerRole name="SitecoreCacheWorkerRole" vmsize="Medium">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+      <Import moduleName="Caching" />
+    </Imports>
+    <Runtime executionContext="elevated">
+      <EntryPoint>
+        <NetFxEntryPoint assemblyName="Sitecore.Azure.CacheWorkerRole.dll" targetFrameworkVersion="4.5" />
+      </EntryPoint>
+    </Runtime>
+    <LocalResources>
+      <LocalStorage name="DiagnosticStore" sizeInMB="10240" cleanOnRoleRecycle="false" />
+    </LocalResources>
+  </WorkerRole>
 </ServiceDefinition>
 ----field----
 field: {9F850E0C-8FE8-4022-8562-39E565B1925D}
 name: Service Configuration
 key: service configuration
-content-length: 928
+content-length: 1568
 
 <?xml version="1.0"?>
-<ServiceConfiguration serviceName="SitecoreCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-10.2.2">
+<ServiceConfiguration serviceName="SitecoreCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-06.2.4">
   <Role name="SitecoreWebRole">
     <Instances count="2" />
     <ConfigurationSettings>
       <Setting name="StorageName" value="" />
       <Setting name="SqlServerName" value="" />
       <Setting name="Sitecore.Azure.ServiceRuntime.WarmupTimeout" value="3600000" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.Caching.NamedCaches" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="SitecoreCacheWorkerRole">
+    <Instances count="2" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Caching.NamedCaches" value="{&quot;caches&quot;:[{&quot;name&quot;:&quot;default&quot;,&quot;policy&quot;:{&quot;eviction&quot;:{&quot;type&quot;:0},&quot;expiration&quot;:{&quot;defaultTTL&quot;:10,&quot;isExpirable&quot;:true,&quot;type&quot;:1},&quot;serverNotification&quot;:{&quot;isEnabled&quot;:false}},&quot;secondaries&quot;:0}]}" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Caching.DiagnosticLevel" value="1" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Caching.CacheSizePercentage" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Caching.ConfigStoreConnectionString" value="" />
@@ -99,6 +120,13 @@ key: mvc assemblies folder
 content-length: 22
 
 App_Data/MvcAssemblies
+----field----
+field: {6DF7215E-2966-4926-93BF-90292224F087}
+name: Cache Worker Role Folder
+key: cache worker role folder
+content-length: 39
+
+App_Data/Sitecore.Azure.CacheWorkerRole
 ----field----
 field: {5552573A-3B78-45CC-8AB3-3956DBE1B62A}
 name: Exclude File Extensions
@@ -130,11 +158,12 @@ bin\ServiceDescription.dll
 field: {06B47032-7F0A-46B5-A500-EDB642B68EBE}
 name: Exclude Directories
 key: exclude directories
-content-length: 976
+content-length: 1017
 
 upload;
 temp;
-App_Config\AzureVendors; 
+App_Config\AzureVendors;
+App_Data\Sitecore.Azure.CacheWorkerRole;
 App_Data\AzureEnvironments; 
 App_Data\AzureOverrideFiles; 
 App_Data\MvcAssemblies;
@@ -166,7 +195,7 @@ sitecore\shell\Themes\Standard\WordProcessing
 field: {FD10E34E-C2F1-4FA8-A09F-D7422C2B2A04}
 name: Connection Strings Patch
 key: connection strings patch
-content-length: 811
+content-length: 897
 
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
@@ -188,7 +217,9 @@ content-length: 811
         </xsl:template>
 -->
 <xsl:template match="/connectionStrings">
-  <connectionStrings />
+  <connectionStrings>
+     <add name="reporting" connectionString="do not remove" />
+  </connectionStrings>
 </xsl:template>
 
 </xsl:stylesheet>
@@ -231,7 +262,7 @@ content-length: 393
 field: {F22E4787-F052-445A-97A8-5FF52C8CF228}
 name: Global WebConfig Patch
 key: global webconfig patch
-content-length: 9171
+content-length: 9080
 
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
@@ -290,13 +321,9 @@ content-length: 9171
   <!-- Viewstate storage End -->
     <!-- Distributed cache Begin -->
   <xsl:template match="configuration/system.web/sessionState">
-    <sessionState mode="Custom" customProvider="DistributedCacheSessionStateStoreProvider">
+     <sessionState mode="Custom" customProvider="AzureInRoleCacheSessionStateProvider" timeout="20">
       <providers>
-        <add name="DistributedCacheSessionStateStoreProvider"
-							type="Microsoft.Web.DistributedCache.DistributedCacheSessionStateStoreProvider, Microsoft.Web.DistributedCache"
-							cacheName="default"
-							useBlobMode="true"
-							dataCacheClientName="default" />
+        <add name="AzureInRoleCacheSessionStateProvider" type="Sitecore.Azure.SessionStateProviders.AzureInRoleCacheSessionStateProvider, Sitecore.Azure.SessionStateProviders" cacheName="default" dataCacheClientName="default" applicationName="SitecoreAzure" pollingInterval="5" />
       </providers>
     </sessionState>
   </xsl:template>
@@ -315,9 +342,8 @@ content-length: 9171
   </xsl:template>
   <xsl:param name="pDataCacheClients">
     <dataCacheClients>
-      <dataCacheClient name="default" isCompressionEnabled="false">
-        <autoDiscover isEnabled="true" identifier="" />
-        <localCache isEnabled="true" sync="TimeoutBased" objectCount="100000" ttlValue="300" />
+      <dataCacheClient name="default">
+        <autoDiscover isEnabled="true" identifier="SitecoreCacheWorkerRole" />
       </dataCacheClient>
     </dataCacheClients>
     <cacheDiagnostics>
@@ -452,7 +478,7 @@ Staging
 ----version----
 language: en
 version: 1
-revision: f9914845-89ea-4842-9f58-0aef4cc805ff
+revision: c12267f4-d103-4f02-b157-076c051d4e8d
 
 ----field----
 field: {25BED78C-4957-4165-998A-CA1B52F67497}
@@ -474,14 +500,14 @@ name: __Revision
 key: __revision
 content-length: 36
 
-f9914845-89ea-4842-9f58-0aef4cc805ff
+c12267f4-d103-4f02-b157-076c051d4e8d
 ----field----
 field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
 name: __Updated
 key: __updated
 content-length: 34
 
-20150107T163350:635562452307645712
+20150112T125955:635566643951098953
 ----field----
 field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
 name: __Updated by
