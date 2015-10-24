@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<control xmlns:def="Definition" xmlns="http://schemas.sitecore.net/Visual-Studio-Intellisense">
+  <BlobLister>
+    <FormDialog ID="Dialog" Icon="Applications/32x32/document_out.png" Header="Move item to" 
+      Text="Select the location where you want to move the item. Then click the Move button." OKButton="Move">
+
+      <CodeBeside Type="Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister.BlobListerForm, Sitecore.Azure.Diagnostics.UI"/>
+
+      <Border Background="white" Border="1px inset" Height="100%">
+        <Listview ID="FileLister" DblClick="OnFileListerDblClick" View="Details">
+          <ListviewHeader>
+            <ListviewHeaderItem Name="name" Header="Name"/>
+            <ListviewHeaderItem Name="size" Header="Size"/>
+            <ListviewHeaderItem Name="modified" Header="Last Modified"/>
+          </ListviewHeader>
+        </Listview>
+      </Border>
+        
+    </FormDialog>
+  </BlobLister>
+</control>
+

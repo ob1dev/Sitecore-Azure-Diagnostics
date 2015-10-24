@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<control xmlns:def="Definition" xmlns="http://schemas.sitecore.net/Visual-Studio-Intellisense" xmlns:sc="sitecore">
+  <LogViewer>
+    <FormPage Application="Reports/LogViewer">
+      <CodeBeside Type="Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer.LogViewerForm, Sitecore.Azure.Diagnostics.UI"/>
+ 
+      <Action ID="HasFile" Disabled="true"/>
+      
+      <Border class="scFlexColumnContainer" style="width:100%; height:100%;">
+
+        <Commandbar ID="Commandbar" Icon="Software/32x32/text_code_colored.png" Title="Log files" Description="This tool displays the content of log files." DataSource="/sitecore/content/Applications/Reports/LogViewer/Commands"/>
+      
+        <div class="scFlexContent">
+          <Frame ID="Document" XmlControl="LogViewerDetails" Style="display:block; position:absolute;" />
+        </div>
+      
+      </Border>
+    
+    </FormPage>
+  </LogViewer>
+</control>

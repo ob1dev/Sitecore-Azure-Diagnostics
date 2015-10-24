@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<control xmlns:def="Definition" xmlns="http://schemas.sitecore.net/Visual-Studio-Intellisense" xmlns:sc="sitecore">
+  <LogViewerDetails>
+    <FormPage>
+      <CodeBeside Type="Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer.LogViewerDetailsForm, Sitecore.Azure.Diagnostics.UI"/>
+
+      <Scrollbox ID="LogViewer" Class="scScrollbox" Padding="0px" FontSize="9pt" FontName="courier new" Border="none" Height="100%">
+
+        <Border ID="TextPanel" Foreground="#999999" Align="center" Padding="16px 0px 16px 0px">
+          <i>
+          <Literal Text="Open a log file." />
+          </i>
+        </Border>
+
+      </Scrollbox>
+    </FormPage>
+  </LogViewerDetails>
+</control>
