@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Web;
 using Sitecore.Azure.Diagnostics.Storage;
 using Sitecore.Diagnostics;
@@ -127,7 +128,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
         }
 
         var blob = LogStorageManager.GetBlob(blobName);
-        blobName = blob.Parent != null ? blob.Parent.Uri.MakeRelativeUri(blob.Uri).ToString() : blob.Name;
+        blobName = blob.Uri.Segments.Last();
         SheerResponse.Confirm(Translate.Text(Texts.ARE_YOU_SURE_YOU_WANT_TO_DELETE_0, blobName));
 
         args.WaitForPostBack();

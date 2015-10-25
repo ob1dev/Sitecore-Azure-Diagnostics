@@ -104,12 +104,11 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       var candidateBlobs = this.GetCandidateBlobs(container, this.BlobSearchPattern);
       if (candidateBlobs.Any())
       {
-        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blobs candidate are going to be deleted.", candidateBlobs.Count()), this);
         this.DeleteBlobs(candidateBlobs);
       }
       else
       {
-        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container does not have any blobs that match the '{1}' search pattern.", container.Name, this.BlobSearchPattern), this);
+        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container does not have any out-to-date blobs that match the '{1}' search pattern.", container.Name, this.BlobSearchPattern), this);
       }
     }
 
@@ -125,9 +124,9 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       Assert.ArgumentNotNull(searchPattern, "searchPattern");
 
       var blobList = LogStorageManager.ListBlobs(container, searchPattern);
-      var candidateBlobList = new List<ICloudBlob>();
+      Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container includes '{1}' blobs that match the '{2}' search pattern.", container.Name, blobList.Count(), searchPattern), this);
 
-      Log.Info(string.Format("Scheduling.BlobsCleanupAgent: Getting cloud blobs candidate for cleaning up."), this);
+      var candidateBlobList = new List<ICloudBlob>();
 
       foreach (ICloudBlob blob in blobList)
       {
@@ -140,6 +139,11 @@ namespace Sitecore.Azure.Diagnostics.Tasks
             candidateBlobList.Add(blob);
           }
         }
+      }
+
+      if (candidateBlobList.Any())
+      {
+        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container includes '{1}' out-to-date blobs that match the '{2}' search pattern.", container.Name, candidateBlobList.Count(), searchPattern), this);
       }
       
       return candidateBlobList;

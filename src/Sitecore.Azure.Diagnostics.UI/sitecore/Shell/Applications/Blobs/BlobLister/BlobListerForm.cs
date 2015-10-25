@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sitecore.Azure.Diagnostics.Storage;
 using Sitecore.Diagnostics;
 using Sitecore.Exceptions;
@@ -94,7 +95,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
         this.FileLister.Controls.Add(item);
 
         item.ID = Control.GetUniqueID("I");
-        item.Header = blob.Parent != null ? blob.Parent.Uri.MakeRelativeUri(blob.Uri).ToString() : blob.Name;
+        item.Header = blob.Uri.Segments.Last();
         item.Icon = "Applications/16x16/document.png";
         item.ServerProperties["Blob"] = blob.Name;
         item.ColumnValues["size"] = MainUtil.FormatSize(blob.Properties.Length);

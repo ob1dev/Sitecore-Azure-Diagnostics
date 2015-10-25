@@ -332,7 +332,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
         string startPattern = searchPattern.Split(maskSymbol).First();
         string endPattern = searchPattern.Split(maskSymbol).Last();
 
-        filteredBlobList = blobList.Where(w => w.Name.StartsWith(startPattern) && w.Name.EndsWith(endPattern)).ToList();
+        filteredBlobList = blobList.Where(w => w.Uri.Segments.Last().StartsWith(startPattern) && w.Uri.Segments.Last().EndsWith(endPattern)).ToList();
       }
 
       return filteredBlobList;
