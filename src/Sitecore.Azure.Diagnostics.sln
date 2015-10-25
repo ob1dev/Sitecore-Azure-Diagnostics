@@ -1,25 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Azure.Diagnostics", "Sitecore.Azure.Diagnostics\Sitecore.Azure.Diagnostics.csproj", "{462F779D-7CCF-47DB-B25B-ECE660F5CC68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Azure.Diagnostics.UI", "Sitecore.Azure.Diagnostics.UI\Sitecore.Azure.Diagnostics.UI.csproj", "{9B619A8D-05AB-4060-A28E-7A7B6E1F37E8}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://obu.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Sitecore.Azure.Storage.Diagnostics\\Sitecore.Azure.Diagnostics.csproj
-		SccProjectName1 = Sitecore.Azure.Storage.Diagnostics
-		SccLocalPath1 = Sitecore.Azure.Storage.Diagnostics
-		SccProjectUniqueName2 = Sitecore.Azure.Diagnostics.UI\\Sitecore.Azure.Diagnostics.UI.csproj
-		SccProjectName2 = Sitecore.Azure.Diagnostics.UI
-		SccLocalPath2 = Sitecore.Azure.Diagnostics.UI
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
