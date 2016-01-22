@@ -13,4 +13,3 @@ The module outputs Sitecore Log statements to Microsoft Azure Storage Service us
 
 **Requirements:**
 + Sitecore CMS and DMS 7.2 rev. 140228 (7.2 Initial Release) or newer
-+ Sitecore Azure 7.2 rev. 140411 or newer
