@@ -245,8 +245,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
       blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : string.Format("{0}/{1}", webRoleRelativeAddress, blobName);
       
       ICloudBlob blob = this.CloudBlobContainer.Exists() ? 
-        this.CloudBlobContainer.GetBlockBlobReference(blobName) : 
-        this.GetContainer(this.ContainerName).GetBlockBlobReference(blobName);
+        this.CloudBlobContainer.GetAppendBlobReference(blobName) : 
+        this.GetContainer(this.ContainerName).GetAppendBlobReference(blobName);
 
       return blob;
     }

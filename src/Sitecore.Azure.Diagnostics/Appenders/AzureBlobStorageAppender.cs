@@ -33,9 +33,9 @@ namespace Sitecore.Azure.Diagnostics.Appenders
     public DateTime CurrentDate { get; protected set; }
 
     /// <summary>
-    /// The cloud block BLOB for storing log entries.
+    /// The cloud BLOB for storing log entries.
     /// </summary>
-    private ICloudBlob cloudBlockBlob;
+    private ICloudBlob cloudBlob;
 
     #endregion
 
@@ -45,21 +45,21 @@ namespace Sitecore.Azure.Diagnostics.Appenders
     /// Gets the BLOB.
     /// </summary>
     /// <value>
-    /// The cloud block BLOB.
+    /// The cloud BLOB.
     /// </value>
     private ICloudBlob Blob
     {
       get
       {
         // Create a new blob if this is the first time it is used.
-        if (this.cloudBlockBlob == null)
+        if (this.cloudBlob == null)
         {
-          this.cloudBlockBlob = this.GetNewBlob();
+          this.cloudBlob = this.GetNewBlob();
         }
         // Recreate a blob if a container is no longer exists.
-        else if (!this.cloudBlockBlob.Container.Exists())
+        else if (!this.cloudBlob.Container.Exists())
         {
-          this.cloudBlockBlob = LogStorageManager.GetBlob(this.cloudBlockBlob.Name);
+          this.cloudBlob = LogStorageManager.GetBlob(this.cloudBlob.Name);
         }
         // Create a new blob if the current shouldn't be used.
         else
@@ -69,11 +69,11 @@ namespace Sitecore.Azure.Diagnostics.Appenders
 
           if (needNewBlob)
           {
-            this.cloudBlockBlob = this.GetNewBlob();
+            this.cloudBlob = this.GetNewBlob();
           }
         }
 
-        return this.cloudBlockBlob;
+        return this.cloudBlob;
       }
     }
 
@@ -102,44 +102,17 @@ namespace Sitecore.Azure.Diagnostics.Appenders
     {
       Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvent, "loggingEvent");
 
-      var blob = this.Blob as CloudBlockBlob;
+      var blob = this.Blob as CloudAppendBlob;
       string message = this.RenderLoggingEvent(loggingEvent);
 
-      this.AddMessageToBlock(blob, message);
-    }
-
-    /// <summary>
-    /// Adds the diagnostic message to block blob.
-    /// </summary>
-    /// <param name="blob">The cloud blob.</param>
-    /// <param name="message">The message.</param>
-    protected virtual void AddMessageToBlock(CloudBlockBlob blob, string message)
-    {
-      Sitecore.Diagnostics.Assert.ArgumentNotNull(blob, "blob");
-      Sitecore.Diagnostics.Assert.ArgumentNotNull(message, "message");
-
-      var blockIds = new List<string>();
-
-      if (blob.Exists())
-      {
-        blockIds.AddRange(blob.DownloadBlockList().Select(b => b.Name));
-      }
-
-      string blockId = Guid.NewGuid().ToString().Replace("-", string.Empty);
-      blockIds.Add(blockId);
-
-      using (var blockData = new MemoryStream(LogStorageManager.DefaultTextEncoding.GetBytes(message), false))
-      {
-        blob.PutBlock(blockId, blockData, null);
-        blob.PutBlockList(blockIds);
-      }
-    }
+      blob.AppendText(message);
+    }    
 
     /// <summary>
     /// Gets the new cloud blob for diagnostic messages.
     /// </summary>
     /// <returns>
-    /// The cloud block blob.
+    /// The cloud blob.
     /// </returns>
     protected virtual ICloudBlob GetNewBlob()
     {
