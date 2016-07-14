@@ -14,7 +14,7 @@ The module outputs Sitecore Log statements to Microsoft Azure Storage Service us
 
 ## Requirements
 
-+ Sitecore XP 8.1 rev. 160519 (8.1 Update-3) or newer
+Sitecore XP 8.1 rev. 160519 (8.1 Update-3) or newer
 
 ## License  
   
