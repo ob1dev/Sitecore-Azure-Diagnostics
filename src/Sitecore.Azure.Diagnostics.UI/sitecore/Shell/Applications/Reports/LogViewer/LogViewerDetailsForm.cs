@@ -56,9 +56,9 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
       var blob = LogStorageManager.GetBlob(blobName);
       var data = string.Empty;
 
-      if (blob.BlobType == BlobType.BlockBlob)
+      if (blob.BlobType == BlobType.AppendBlob)
       {
-        data = ((CloudBlockBlob)blob).DownloadText(LogStorageManager.DefaultTextEncoding);
+        data = ((CloudAppendBlob)blob).DownloadText(LogStorageManager.DefaultTextEncoding);
       }
       
       if (string.IsNullOrEmpty(data))

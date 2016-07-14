@@ -152,7 +152,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
     /// <summary>
     /// Gets the BLOB age. The time since last modification.
     /// </summary>
-    /// <param name="blob">The cloud block BLOB.</param>
+    /// <param name="blob">The cloud BLOB.</param>
     /// <returns></returns>
     protected TimeSpan GetBlobAge(ICloudBlob blob)
     {
@@ -164,7 +164,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
     /// <summary>
     /// Gets the BLOB time (max of last modified)
     /// </summary>
-    /// <param name="blob">The cloud block BLOB.</param>
+    /// <param name="blob">The cloud BLOB.</param>
     /// <returns></returns>
     protected DateTime GetBlobLastModifiedDate(ICloudBlob blob)
     {
