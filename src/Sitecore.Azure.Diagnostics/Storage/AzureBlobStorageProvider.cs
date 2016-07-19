@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration.Provider;
-using System.Linq;
-using System.Text;
-using Microsoft.Azure;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Azure.Diagnostics.Storage.RetryPolicies;
 using Sitecore.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Configuration.Provider;
+using System.Linq;
+using System.Text;
 
 namespace Sitecore.Azure.Diagnostics.Storage
 {
@@ -30,6 +30,16 @@ namespace Sitecore.Azure.Diagnostics.Storage
     private const string AppSettingName = "Azure.Storage.ConnectionString.AppSettingName";
 
     /// <summary>
+    /// The web apps environment variables that contains the name of the site.
+    /// </summary>
+    private const string WebsiteNameEnvVar = "WEBSITE_SITE_NAME";
+
+    /// <summary>
+    /// The web apps environment variables that contains the VM's id where the site is running on.
+    /// </summary>
+    private const string WebsiteInstanceIdEnvVar = "WEBSITE_INSTANCE_ID ";
+
+    /// <summary>
     /// The cloud BLOB client.
     /// </summary>
     private CloudBlobClient cloudBlobClient;
@@ -38,7 +48,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// The cloud blob container name
     /// </summary>
     public string CloudBlobContainerName { get; protected set; }
-    
+
     /// <summary>
     /// The BLOB container public access type
     /// </summary>
@@ -69,7 +79,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     public AzureBlobStorageProvider()
     {
       string appSetting = Configuration.Settings.GetSetting(AppSettingName);
-      string storageConnectionString = CloudConfigurationManager.GetSetting(appSetting);
+      string storageConnectionString = ConfigurationManager.AppSettings[appSetting];
 
       // Retrieve storage account from connection string.
       this.StorageAccount = CloudStorageAccount.Parse(storageConnectionString);
@@ -187,7 +197,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
         }
       }
     }
-    
+
     #endregion
 
     #region Public Methods
@@ -224,9 +234,9 @@ namespace Sitecore.Azure.Diagnostics.Storage
       {
         RetryPolicy = new ContainerBeingDeletedRetryPolicy(),
       };
-     
+
       container.CreateIfNotExists(this.PublicAccessType, options);
-      
+
       return container;
     }
 
@@ -239,13 +249,13 @@ namespace Sitecore.Azure.Diagnostics.Storage
     {
       Assert.ArgumentNotNull(blobName, "blobName");
 
-      string webRoleRelativeAddress = this.GetWebRoleRelativeAddress();
+      string webRoleRelativeAddress = this.GetWebsiteRelativeAddress();
 
       // Build blob name for a Role Environment using the following format: {DeploymentId}/{RoleInstanceId}/{BlobName}.
       blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : string.Format("{0}/{1}", webRoleRelativeAddress, blobName);
-      
-      ICloudBlob blob = this.CloudBlobContainer.Exists() ? 
-        this.CloudBlobContainer.GetAppendBlobReference(blobName) : 
+
+      ICloudBlob blob = this.CloudBlobContainer.Exists() ?
+        this.CloudBlobContainer.GetAppendBlobReference(blobName) :
         this.GetContainer(this.ContainerName).GetAppendBlobReference(blobName);
 
       return blob;
@@ -261,8 +271,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
     {
       Assert.ArgumentNotNull(blobName, "blobName");
 
-      ICloudBlob blob = this.CloudBlobContainer.Exists() ? 
-        this.CloudBlobContainer.GetBlobReferenceFromServer(blobName) : 
+      ICloudBlob blob = this.CloudBlobContainer.Exists() ?
+        this.CloudBlobContainer.GetBlobReferenceFromServer(blobName) :
         this.GetContainer(this.ContainerName).GetBlobReferenceFromServer(blobName);
 
       return blob;
@@ -321,7 +331,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
       Assert.ArgumentNotNull(container, "container");
       Assert.ArgumentNotNull(searchPattern, "searchPattern");
 
-      string webRoleRelativeAddress = this.GetWebRoleRelativeAddress();
+      string webRoleRelativeAddress = this.GetWebsiteRelativeAddress();
       var blobList = container.ListBlobs(webRoleRelativeAddress, true).Cast<ICloudBlob>().ToList();
 
       var filteredBlobList = new List<ICloudBlob>();
@@ -343,28 +353,20 @@ namespace Sitecore.Azure.Diagnostics.Storage
     #region Protected Methods
 
     /// <summary>
-    /// Gets the deployment relative address.
-    /// </summary>
-    /// <returns>The deployment address that includes {DeploymentId}.</returns>
-    protected virtual string GetDeploymentRelativeAddress()
-    {
-      return RoleEnvironment.IsAvailable ? RoleEnvironment.DeploymentId : string.Empty;
-    }
-
-    /// <summary>
     /// Gets the WebRole relative address.
     /// </summary>
     /// <returns>
     /// The WebRole address that includes {DeploymentId}/{RoleInstanceId}.
     /// </returns>
-    protected virtual string GetWebRoleRelativeAddress()
+    protected virtual string GetWebsiteRelativeAddress()
     {
       string webRoleRelativeAddress = string.Empty;
-      string deploymentRelativeAddress = this.GetDeploymentRelativeAddress();
+      var websiteName = Environment.GetEnvironmentVariable(WebsiteNameEnvVar);
 
-      if (!string.IsNullOrEmpty(deploymentRelativeAddress))
+      if (!string.IsNullOrEmpty(websiteName))
       {
-        webRoleRelativeAddress = string.Format("{0}/{1}", deploymentRelativeAddress, RoleEnvironment.CurrentRoleInstance.Id);
+        var websiteInstanceId = Environment.GetEnvironmentVariable(WebsiteInstanceIdEnvVar);
+        webRoleRelativeAddress = $"{websiteName}/{websiteInstanceId}";
       }
 
       return webRoleRelativeAddress;
