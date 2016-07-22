@@ -254,9 +254,15 @@ namespace Sitecore.Azure.Diagnostics.Storage
       // Build blob name for a Role Environment using the following format: {DeploymentId}/{RoleInstanceId}/{BlobName}.
       blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : string.Format("{0}/{1}", webRoleRelativeAddress, blobName);
 
-      ICloudBlob blob = this.CloudBlobContainer.Exists() ?
+      var blob = this.CloudBlobContainer.Exists() ?
         this.CloudBlobContainer.GetAppendBlobReference(blobName) :
         this.GetContainer(this.ContainerName).GetAppendBlobReference(blobName);
+
+      if (!blob.Exists())
+      {
+        // Create an empty append blob or throw an exception if the blob exists.
+        blob.CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
+      }
 
       return blob;
     }

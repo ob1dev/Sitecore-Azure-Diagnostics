@@ -106,24 +106,8 @@ namespace Sitecore.Azure.Diagnostics.Appenders
       var blob = this.Blob as CloudAppendBlob;
       string message = this.RenderLoggingEvent(loggingEvent);
 
-      CreateBlobIfNotExists(blob);
       blob.AppendText(message);
     }    
-
-    /// <summary>
-    /// Creates a new blob for the specified <see cref="CloudAppendBlob" /> if it does not already exist.
-    /// </summary>
-    /// <param name="blob">The <see cref="CloudAppendBlob" />.</param>
-    /// <param name="accessCondition">The access condition.</param>
-    /// <param name="blobRequestOptions">The blob request options.</param>
-    /// <param name="operationContext">The operation context.</param>
-    protected static void CreateBlobIfNotExists(CloudAppendBlob blob, AccessCondition accessCondition = null, BlobRequestOptions blobRequestOptions = null, OperationContext operationContext = null)
-    {
-        if (!blob.Exists(blobRequestOptions, operationContext))
-        {
-            blob.CreateOrReplace(accessCondition, blobRequestOptions, operationContext);
-        }
-    }
 
     /// <summary>
     /// Gets the new cloud blob for diagnostic messages.
