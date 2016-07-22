@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Configuration;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Sitecore.Azure.Diagnostics.Storage
 {

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Web;
-using System.Web.UI;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Azure.Diagnostics.Storage;
 using Sitecore.Diagnostics;
 using Sitecore.Globalization;
 using Sitecore.Web;
 using Sitecore.Web.UI.HtmlControls;
 using Sitecore.Web.UI.Sheer;
+using System;
+using System.Web;
+using System.Web.UI;
 
 namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
 {

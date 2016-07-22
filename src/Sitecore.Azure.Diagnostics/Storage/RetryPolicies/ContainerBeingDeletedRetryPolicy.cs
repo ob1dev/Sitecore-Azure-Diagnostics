@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.RetryPolicies;
+using System;
+using System.Net;
 
 namespace Sitecore.Azure.Diagnostics.Storage.RetryPolicies
 {

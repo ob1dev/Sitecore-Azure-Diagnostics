@@ -1,7 +1,7 @@
-﻿using System.Collections.Specialized;
-using Sitecore.Diagnostics;
+﻿using Sitecore.Diagnostics;
 using Sitecore.Text;
 using Sitecore.Web;
+using System.Collections.Specialized;
 
 namespace Sitecore.Azure.Diagnostics.UI.Web
 {

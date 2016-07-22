@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.Storage.Blob;
+using Sitecore.Azure.Diagnostics.Storage;
+using Sitecore.Diagnostics;
+using Sitecore.Xml;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Sitecore.Azure.Diagnostics.Storage;
-using Sitecore.Diagnostics;
-using Sitecore.Xml;
 
 namespace Sitecore.Azure.Diagnostics.Tasks
 {

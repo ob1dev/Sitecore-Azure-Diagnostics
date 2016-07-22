@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Sitecore.Diagnostics;
+﻿using Sitecore.Diagnostics;
 using Sitecore.Diagnostics.PerformanceCounters;
 using Sitecore.Tasks;
+using System;
+using System.Collections.Generic;
 
 namespace Sitecore.Azure.Diagnostics.Tasks
 {

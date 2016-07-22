@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Sitecore.Azure.Diagnostics.Storage;
+﻿using Sitecore.Azure.Diagnostics.Storage;
 using Sitecore.Diagnostics;
 using Sitecore.Exceptions;
 using Sitecore.Shell.Web;
@@ -9,6 +7,8 @@ using Sitecore.Web.UI.HtmlControls;
 using Sitecore.Web.UI.Pages;
 using Sitecore.Web.UI.Sheer;
 using Sitecore.Web.UI.XmlControls;
+using System;
+using System.Linq;
 
 namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
 {

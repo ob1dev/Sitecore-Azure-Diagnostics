@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using log4net.Appender;
+﻿using log4net.Appender;
 using log4net.spi;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Azure.Diagnostics.Storage;
+using System;
 
 namespace Sitecore.Azure.Diagnostics.Appenders
 {

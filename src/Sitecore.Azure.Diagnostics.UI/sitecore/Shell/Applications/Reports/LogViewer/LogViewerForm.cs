@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Web;
-using Sitecore.Azure.Diagnostics.Storage;
+﻿using Sitecore.Azure.Diagnostics.Storage;
 using Sitecore.Diagnostics;
 using Sitecore.Globalization;
 using Sitecore.Web.UI.HtmlControls;
 using Sitecore.Web.UI.Sheer;
+using System;
+using System.IO;
+using System.Linq;
+using System.Web;
 
 namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
 {
