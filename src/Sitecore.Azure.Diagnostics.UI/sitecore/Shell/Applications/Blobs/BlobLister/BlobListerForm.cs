@@ -17,7 +17,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
   /// </summary>
   public class BlobListerForm : DialogForm
   {
-    #region Fields
+    #region Protected fields
 
     /// <summary>
     /// The dialog.
@@ -28,80 +28,10 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
     /// The file lister.
     /// </summary>
     protected Listview FileLister;
-    
-    #endregion
+
+    #endregion Protected fields
 
     #region Protected methods
-
-    /// <summary>
-    /// Raises the load event.
-    /// </summary>
-    /// <param name="e">
-    /// The <see cref="System.EventArgs"/> instance containing the event data.
-    /// </param>
-    /// <remarks>
-    /// This method notifies the server control that it should perform actions common to each HTTP
-    /// request for the page it is associated with, such as setting up a database query. At this
-    /// stage in the page lifecycle, server controls in the hierarchy are created and initialized,
-    /// view state is restored, and form controls reflect client-side data. Use the IsPostBack
-    /// property to determine whether the page is being loaded in response to a client postback,
-    /// or if it is being loaded and accessed for the first time.
-    /// </remarks>
-    protected override void OnLoad([NotNull] EventArgs e)
-    {
-      Assert.ArgumentNotNull(e, "e");
-
-      this.CheckSecurity();
-
-      base.OnLoad(e);
-
-      if (Context.ClientPage.IsEvent)
-      {
-        return;
-      }
-
-      var urlHandle = UrlHandle.Get();
-
-      var icon = urlHandle["ic"];
-      if (!string.IsNullOrEmpty(icon))
-      {
-        this.Dialog["Icon"] = icon;
-      }
-
-      var header = WebUtil.SafeEncode(urlHandle["he"]);
-      if (header.Length > 0)
-      {
-        this.Dialog["Header"] = header;
-      }
-
-      var text = WebUtil.SafeEncode(urlHandle["txt"]);
-      if (text.Length > 0)
-      {
-        this.Dialog["Text"] = text;
-      }
-
-      var button = WebUtil.SafeEncode(urlHandle["btn"]);
-      if (button.Length > 0)
-      {
-        this.Dialog["OKButton"] = button;
-      }
-
-      var filter = urlHandle["flt"];
-      var blobsList = LogStorageManager.ListBlobs(filter);
-
-      foreach (var blob in blobsList)
-      {
-        var item = new ListviewItem();
-        this.FileLister.Controls.Add(item);
-
-        item.ID = Control.GetUniqueID("I");
-        item.Header = blob.Uri.Segments.Last();
-        item.Icon = "Applications/16x16/document.png";
-        item.ServerProperties["Blob"] = blob.Name;
-        item.ColumnValues["size"] = MainUtil.FormatSize(blob.Properties.Length);
-        item.ColumnValues["modified"] = blob.Properties.LastModified.HasValue ? blob.Properties.LastModified.Value.LocalDateTime : DateTime.Now;
-      }
-    }
 
     /// <summary>
     /// Checks the security.
@@ -163,6 +93,79 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
     }
 
     /// <summary>
+    /// Raises the load event.
+    /// </summary>
+    /// <param name="e">
+    /// The <see cref="System.EventArgs"/> instance containing the event data.
+    /// </param>
+    /// <remarks>
+    /// This method notifies the server control that it should perform actions common to each HTTP
+    /// request for the page it is associated with, such as setting up a database query. At this
+    /// stage in the page lifecycle, server controls in the hierarchy are created and initialized,
+    /// view state is restored, and form controls reflect client-side data. Use the IsPostBack
+    /// property to determine whether the page is being loaded in response to a client postback,
+    /// or if it is being loaded and accessed for the first time.
+    /// </remarks>
+    protected override void OnLoad([NotNull] EventArgs e)
+    {
+      Assert.ArgumentNotNull(e, "e");
+
+      this.CheckSecurity();
+
+      base.OnLoad(e);
+
+      if (Context.ClientPage.IsEvent)
+      {
+        return;
+      }
+
+      var urlHandle = UrlHandle.Get();
+
+      var icon = urlHandle["ic"];
+
+      if (!string.IsNullOrEmpty(icon))
+      {
+        this.Dialog["Icon"] = icon;
+      }
+
+      var header = WebUtil.SafeEncode(urlHandle["he"]);
+
+      if (header.Length > 0)
+      {
+        this.Dialog["Header"] = header;
+      }
+
+      var text = WebUtil.SafeEncode(urlHandle["txt"]);
+
+      if (text.Length > 0)
+      {
+        this.Dialog["Text"] = text;
+      }
+
+      var button = WebUtil.SafeEncode(urlHandle["btn"]);
+
+      if (button.Length > 0)
+      {
+        this.Dialog["OKButton"] = button;
+      }
+
+      var filter = urlHandle["flt"];
+      var blobsList = LogStorageManager.ListBlobs(filter);
+
+      foreach (var blob in blobsList)
+      {
+        var item = new ListviewItem();
+        this.FileLister.Controls.Add(item);
+        item.ID = Control.GetUniqueID("I");
+        item.Header = blob.Uri.Segments.Last();
+        item.Icon = "Applications/16x16/document.png";
+        item.ServerProperties["Blob"] = blob.Name;
+        item.ColumnValues["size"] = MainUtil.FormatSize(blob.Properties.Length);
+        item.ColumnValues["modified"] = blob.Properties.LastModified.HasValue ? blob.Properties.LastModified.Value.LocalDateTime : DateTime.Now;
+      }
+    }
+
+    /// <summary>
     /// Handles a click on the OK button.
     /// </summary>
     /// <param name="sender">
@@ -182,7 +185,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister
 
       this.DoOk();
     }
-    
+
     #endregion Protected methods
   }
 }

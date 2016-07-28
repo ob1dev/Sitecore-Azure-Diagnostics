@@ -16,6 +16,8 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
   /// </summary>
   public class LogViewerDetailsForm : BaseForm
   {
+    #region Protected fields
+
     /// <summary>
     /// The log viewer.
     /// </summary>
@@ -25,18 +27,22 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
     /// The text panel.
     /// </summary>
     protected Border TextPanel;
-    
+
+    #endregion Protected fields
+
+    #region Protected methods
+
     /// <summary>
     /// Raises the load event.
     /// </summary>
-    /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
     /// <contract>
-    ///   <requires name="e" condition="not null" />
-    /// </contract>
-    protected override void OnLoad(EventArgs e)
+    ///   <requires name="e" condition="not null"/>
+    ///   </contract>
+    protected override void OnLoad([NotNull] EventArgs e)
     {
       Assert.ArgumentNotNull(e, "e");
-      Assert.CanRunApplication("/sitecore/content/Applications/Control Panel/Reports/Log Viewer");
+      Assert.CanRunApplication("/sitecore/content/Applications/Tools/Log Viewer");
 
       base.OnLoad(e);
 
@@ -46,18 +52,18 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
       }
 
       string blobName = WebUtil.GetQueryString("blob");
+
       if (string.IsNullOrEmpty(blobName))
       {
         return;
       }
-
-      this.TextPanel.Visible = false;
-
+     
       var blob = LogStorageManager.GetBlob(blobName);
       var data = string.Empty;
 
       if (blob.BlobType == BlobType.AppendBlob)
       {
+        this.TextPanel.Visible = false;
         data = ((CloudAppendBlob)blob).DownloadText(LogStorageManager.DefaultTextEncoding);
       }
       
@@ -70,5 +76,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
       data = HttpUtility.HtmlEncode(data).Replace("\n", "<br/>");
       this.LogViewer.Controls.Add(new LiteralControl(data));
     }
+
+    #endregion
   }
 }

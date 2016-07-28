@@ -6,12 +6,12 @@
 
       <CodeBeside Type="Sitecore.Azure.Diagnostics.UI.Shell.Applications.Blobs.BlobLister.BlobListerForm, Sitecore.Azure.Diagnostics.UI"/>
 
-      <Border Background="white" Border="1px inset" Height="100%">
+      <Border Background="white" Height="100%">
         <Listview ID="FileLister" DblClick="OnFileListerDblClick" View="Details">
           <ListviewHeader>
             <ListviewHeaderItem Name="name" Header="Name"/>
             <ListviewHeaderItem Name="size" Header="Size"/>
-            <ListviewHeaderItem Name="modified" Header="Last Modified"/>
+            <ListviewHeaderItem Name="modified" Header="Date modified"/>
           </ListviewHeader>
         </Listview>
       </Border>

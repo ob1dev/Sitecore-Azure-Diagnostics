@@ -3,10 +3,10 @@
   <LogViewerDetails>
     <FormPage>
       <CodeBeside Type="Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer.LogViewerDetailsForm, Sitecore.Azure.Diagnostics.UI"/>
+      <style>hr {margin: 15px 0 0; border:0px; }</style>
+      <Scrollbox ID="LogViewer" Class="scScrollbox" Padding="15px" FontSize="14px" FontName="courier new" Border="none" Height="100%">
 
-      <Scrollbox ID="LogViewer" Class="scScrollbox" Padding="0px" FontSize="9pt" FontName="courier new" Border="none" Height="100%">
-
-        <Border ID="TextPanel" Foreground="#999999" Align="center" Padding="16px 0px 16px 0px">
+        <Border ID="TextPanel" Align="center" Padding="16px 0px 16px 0px">
           <i>
           <Literal Text="Open a log file." />
           </i>

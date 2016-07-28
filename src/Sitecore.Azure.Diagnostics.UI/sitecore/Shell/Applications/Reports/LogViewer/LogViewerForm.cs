@@ -41,45 +41,13 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
 
       base.OnLoad(e);
 
-      Assert.CanRunApplication("/sitecore/content/Applications/Control Panel/Reports/Log Viewer");
+      Assert.CanRunApplication("/sitecore/content/Applications/Tools/Log Viewer");
     }
-
+    
     #endregion
-
+    
     #region Public methods
-
-    /// <summary>
-    /// Opens the specified args.
-    /// </summary>
-    /// <param name="args">The arguments.</param>
-    /// <contract>
-    ///   <requires name="args" condition="not null" />
-    /// </contract>
-    [HandleMessage("logviewer:open", true)]
-    public void Open([NotNull] ClientPipelineArgs args)
-    {
-      Assert.ArgumentNotNull(args, "args");
-
-      if (args.IsPostBack)
-      {
-        if (args.Result.Length > 0 && args.Result != "undefined")
-        {
-          if (string.IsNullOrEmpty(args.Result))
-          {
-            SheerResponse.Alert(Texts.YOU_CAN_ONLY_OPEN_LOG_FILES);
-            return;
-          }
-
-          this.SetBlob(args.Result);
-        }
-      }
-      else
-      {
-        Framework.Blobs.ListBlobs(Texts.OPEN_LOG_FILE, Texts.SELECT_A_LOG_FILE, "Software/32x32/text_code_colored.png", Texts.OPEN, "*log*.txt");
-        args.WaitForPostBack();
-      }
-    }
-
+    
     /// <summary>
     /// Deletes the specified args.
     /// </summary>
@@ -148,18 +116,55 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
       Assert.ArgumentNotNull(message, "message");
 
       var blobName = StringUtil.GetString(Context.ClientPage.ServerProperties["Blob"]);
-      if (blobName == null)
+      if (string.IsNullOrEmpty(blobName))
       {
         Context.ClientPage.ClientResponse.Alert(Texts.YOU_MUST_OPEN_A_LOG_FILE_FIRST);
         return;
       }
-      
+
       if (string.IsNullOrEmpty(blobName))
       {
         return;
       }
 
       Framework.Blobs.Download(blobName);
+    }
+
+    /// <summary>
+    /// Opens the specified args.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    /// <contract>
+    ///   <requires name="args" condition="not null" />
+    /// </contract>
+    [HandleMessage("logviewer:open", true)]
+    public void Open([NotNull] ClientPipelineArgs args)
+    {
+      Assert.ArgumentNotNull(args, "args");
+
+      if (args.IsPostBack)
+      {
+        if (args.Result.Length > 0 && args.Result != "undefined")
+        {
+          if (string.IsNullOrEmpty(args.Result))
+          {
+            SheerResponse.Alert(Texts.YOU_CAN_ONLY_OPEN_LOG_FILES);
+            return;
+          }
+
+          this.SetBlob(args.Result);
+        }
+      }
+      else
+      {
+        Framework.Blobs.ListBlobs(
+          Texts.OPEN_LOG_FILE, 
+          " ", 
+          "Software/32x32/text_code_colored.png", 
+          Texts.OPEN, 
+          "*log*.txt");
+        args.WaitForPostBack();
+      }
     }
 
     /// <summary>
@@ -182,9 +187,9 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
     #region Private methods
 
     /// <summary>
-    /// Sets the file.
+    /// Sets the blob.
     /// </summary>
-    /// <param name="blobName">The filename.</param>
+    /// <param name="blobName">The blob name.</param>
     /// <contract>
     ///   <requires name="filename" condition="none" />
     /// </contract>
