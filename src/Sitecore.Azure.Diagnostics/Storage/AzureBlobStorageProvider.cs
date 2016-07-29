@@ -258,11 +258,11 @@ namespace Sitecore.Azure.Diagnostics.Storage
         this.CloudBlobContainer.GetAppendBlobReference(blobName) :
         this.GetContainer(this.ContainerName).GetAppendBlobReference(blobName);
 
-      if (!blob.Exists())
-      {
-        // Create an empty append blob or throw an exception if the blob exists.
-        blob.CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
-      }
+      //if (!blob.Exists())
+      //{
+      //  // Create an empty append blob or throw an exception if the blob exists.
+      //  blob.CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
+      //}
 
       return blob;
     }

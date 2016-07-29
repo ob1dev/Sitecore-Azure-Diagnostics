@@ -1,5 +1,6 @@
 ﻿using log4net.Appender;
 using log4net.spi;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Azure.Diagnostics.Storage;
 using System;
@@ -100,8 +101,14 @@ namespace Sitecore.Azure.Diagnostics.Appenders
       Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvent, "loggingEvent");
 
       var blob = this.Blob as CloudAppendBlob;
-      string message = this.RenderLoggingEvent(loggingEvent);
 
+      if (!blob.Exists())
+      {
+        // Create an empty append blob or throw an exception if the blob exists.
+        blob.CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
+      }
+
+      string message = this.RenderLoggingEvent(loggingEvent);
       blob.AppendText(message);
     }    
 
