@@ -109,8 +109,8 @@ namespace Sitecore.Azure.Diagnostics.Appenders
       }
 
       string message = this.RenderLoggingEvent(loggingEvent);
-      blob.AppendText(message);
-    }    
+      blob.AppendText(message, LogStorageManager.DefaultTextEncoding, null, null, null);
+    }
 
     /// <summary>
     /// Gets the new cloud blob for diagnostic messages.
