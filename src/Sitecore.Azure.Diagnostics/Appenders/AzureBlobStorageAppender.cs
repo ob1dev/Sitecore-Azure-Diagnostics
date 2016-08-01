@@ -4,13 +4,14 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sitecore.Azure.Diagnostics.Storage;
 using System;
+using System.Text;
 
 namespace Sitecore.Azure.Diagnostics.Appenders
 {
   /// <summary>
   /// Represents the appender that logs Sitecore diagnostic information to Microsoft Azure Blob storage service.
   /// </summary>
-  public class AzureBlobStorageAppender : AppenderSkeleton
+  public class AzureBlobStorageAppender : BufferingAppenderSkeleton
   {
     #region Fields
 
@@ -71,6 +72,12 @@ namespace Sitecore.Azure.Diagnostics.Appenders
           }
         }
 
+        if (!cloudBlob.Exists())
+        {
+          // Create an empty append blob or throw an exception if the blob exists.
+          ((CloudAppendBlob) cloudBlob).CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
+        }
+
         return this.cloudBlob;
       }
     }
@@ -93,23 +100,23 @@ namespace Sitecore.Azure.Diagnostics.Appenders
     #region Protected Methods
 
     /// <summary>
-    /// Appends the specified logging event.
+    /// Sends the buffer's events to be appended as one chunk of content in one go to the cloud blob.
     /// </summary>
-    /// <param name="loggingEvent">The logging event.</param>
-    protected override void Append(LoggingEvent loggingEvent)
+    /// <param name="loggingEvents">The logging events.</param>
+    protected override void SendBuffer(LoggingEvent[] loggingEvents)
     {
-      Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvent, "loggingEvent");
+      Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvents, "loggingEvents");
 
-      var blob = this.Blob as CloudAppendBlob;
+      var content = new StringBuilder();
 
-      if (!blob.Exists())
+      foreach (var loggingEvent in loggingEvents)
       {
-        // Create an empty append blob or throw an exception if the blob exists.
-        blob.CreateOrReplace(AccessCondition.GenerateIfNotExistsCondition());
+        string message = this.RenderLoggingEvent(loggingEvent);
+        content.Append(message);       
       }
 
-      string message = this.RenderLoggingEvent(loggingEvent);
-      blob.AppendText(message, LogStorageManager.DefaultTextEncoding, null, null, null);
+      var blob = this.Blob as CloudAppendBlob;
+      blob.AppendTextAsync(content.ToString(), LogStorageManager.DefaultTextEncoding, null, null, null);
     }
 
     /// <summary>
