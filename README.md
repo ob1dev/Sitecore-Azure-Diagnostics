@@ -2,6 +2,8 @@
 
 The module outputs Sitecore Log statements to [Microsoft Azure Storage](https://azure.microsoft.com/en-us/services/storage/) service using the Append Blobs.
 
+[![NuGet version](https://img.shields.io/nuget/v/Sitecore.Azure.Diagnostics.svg)](https://www.nuget.org/packages/Sitecore.Azure.Diagnostics/)
+
 ## Features
 
 + Append regular, WebDAV, Search, Crawling and Publishing Sitecore diagnostics
