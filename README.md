@@ -4,6 +4,8 @@ The module outputs Sitecore Log statements to [Microsoft Azure Storage](https://
 
 [![NuGet version](https://img.shields.io/nuget/v/Sitecore.Azure.Diagnostics.svg)](https://www.nuget.org/packages/Sitecore.Azure.Diagnostics/)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/lcxyk2jftuie4w68?svg=true)](https://ci.appveyor.com/project/olegburov/sitecore-azure-diagnostics)
+
 ## Features
 
 + Append regular, WebDAV, Search, Crawling and Publishing Sitecore diagnostics
