@@ -55,15 +55,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Sitecore.Client, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SC.Sitecore.Client.8.1.3.160519\lib\Sitecore.Client.dll</HintPath>
+      <HintPath>..\packages\SC.Sitecore.Client.8.1.3\lib\Sitecore.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.Kernel, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SC.Sitecore.Kernel.8.1.3.160519\lib\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\packages\SC.Sitecore.Kernel.8.1.3\lib\Sitecore.Kernel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.Logging, Version=1.2.0.30715, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SC.Sitecore.Logging.8.1.3.160519\lib\Sitecore.Logging.dll</HintPath>
+      <HintPath>..\packages\SC.Sitecore.Logging.8.1.3\lib\Sitecore.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
