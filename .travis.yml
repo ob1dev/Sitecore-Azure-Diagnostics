@@ -1,0 +1,2 @@
+language: csharp
+solution: .\src\Sitecore.Azure.Diagnostics.sln
