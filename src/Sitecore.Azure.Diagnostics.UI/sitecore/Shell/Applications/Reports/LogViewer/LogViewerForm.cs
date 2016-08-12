@@ -78,7 +78,7 @@ namespace Sitecore.Azure.Diagnostics.UI.Shell.Applications.Reports.LogViewer
             var blob = LogStorageManager.GetBlob(blobName); 
             blob.DeleteAsync();
 
-            Log.Audit(string.Format("Delete the '{0}' cloud blob.", blob.Name), this);
+            Log.Audit($"Delete the '{blob.Name}' cloud blob.", this);
             this.SetBlob(string.Empty);
           }
           catch (Exception ex)

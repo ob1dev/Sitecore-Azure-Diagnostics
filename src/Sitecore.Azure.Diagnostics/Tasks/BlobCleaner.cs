@@ -37,7 +37,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
     /// <param name="configNode">The config node.</param>
     public BlobCleaner(XmlNode configNode)
     {
-      Assert.ArgumentNotNull(configNode, "configNode");
+      Assert.ArgumentNotNull(configNode, nameof(configNode));
 
       NameValueCollection configSettings = XmlUtil.GetAttributes(configNode);
 
@@ -51,7 +51,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       this.maxAge = DateUtil.ParseTimeSpan(configSettings["maxAge"], TimeSpan.FromDays(7));
       if (this.maxAge == TimeSpan.Zero)
       {
-        Log.Warn(string.Format("Scheduling.BlobsCleanupAgent: The 'maxAge' attribute equals to '{0:dd\\.hh\\:mm\\:ss}'. All blobs will be deleted imitatively.", TimeSpan.Zero), this);
+        Log.Warn($"Scheduling.BlobsCleanupAgent: The 'maxAge' attribute equals to '{TimeSpan.Zero:dd\\.hh\\:mm\\:ss}'. All blobs will be deleted imitatively.", this);
       }
     }
 
@@ -87,7 +87,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       }
       else
       {
-        Log.Warn(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container has not been found.", container.Name), this);
+        Log.Warn($"Scheduling.BlobsCleanupAgent: The '{container.Name}' cloud blob container has not been found.", this);
       }
     }
 
@@ -108,7 +108,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       }
       else
       {
-        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container does not have any out-to-date blobs that match the '{1}' search pattern.", container.Name, this.BlobSearchPattern), this);
+        Log.Info($"Scheduling.BlobsCleanupAgent: The '{container.Name}' cloud blob container does not have any out-to-date blobs that match the '{this.BlobSearchPattern}' search pattern.", this);
       }
     }
 
@@ -124,7 +124,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
       Assert.ArgumentNotNull(searchPattern, "searchPattern");
 
       var blobList = LogStorageManager.ListBlobs(container, searchPattern);
-      Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container includes '{1}' blobs that match the '{2}' search pattern.", container.Name, blobList.Count(), searchPattern), this);
+      Log.Info($"Scheduling.BlobsCleanupAgent: The '{container.Name}' cloud blob container includes '{blobList.Count()}' blobs that match the '{searchPattern}' search pattern.", this);
 
       var candidateBlobList = new List<ICloudBlob>();
 
@@ -143,7 +143,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
 
       if (candidateBlobList.Any())
       {
-        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob container includes '{1}' out-to-date blobs that match the '{2}' search pattern.", container.Name, candidateBlobList.Count(), searchPattern), this);
+        Log.Info($"Scheduling.BlobsCleanupAgent: The '{container.Name}' cloud blob container includes '{candidateBlobList.Count()}' out-to-date blobs that match the '{searchPattern}' search pattern.", this);
       }
       
       return candidateBlobList;
@@ -187,8 +187,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
 
         TimeSpan age = this.GetBlobAge(blob);
 
-        Log.Info(string.Format("Scheduling.BlobsCleanupAgent: The '{0}' cloud blob is being deleted by cleanup task (Last Modified UTC Date: '{1}', Age: '{2:dd\\.hh\\:mm\\:ss}', Max allowed age: '{3}'.", 
-         blob.Name, this.GetBlobLastModifiedDate(blob), age, this.maxAge), this);
+        Log.Info($"Scheduling.BlobsCleanupAgent: The '{blob.Name}' cloud blob is being deleted by cleanup task (Last Modified UTC Date: '{this.GetBlobLastModifiedDate(blob)}', Age: '{age:dd\\.hh\\:mm\\:ss}', Max allowed age: '{this.maxAge}'.", this);        
       }
     }
 

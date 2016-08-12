@@ -105,7 +105,7 @@ namespace Sitecore.Azure.Diagnostics.Appenders
     /// <param name="loggingEvents">The logging events.</param>
     protected override void SendBuffer(LoggingEvent[] loggingEvents)
     {
-      Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvents, "loggingEvents");
+      Sitecore.Diagnostics.Assert.ArgumentNotNull(loggingEvents, nameof(loggingEvents));
 
       var content = new StringBuilder();
 

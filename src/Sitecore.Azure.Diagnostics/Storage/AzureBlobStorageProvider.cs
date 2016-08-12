@@ -209,8 +209,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <param name="config">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
     public override void Initialize(string name, NameValueCollection config)
     {
-      Assert.ArgumentNotNullOrEmpty(name, "name");
-      Assert.ArgumentNotNull(config, "config");
+      Assert.ArgumentNotNullOrEmpty(name, nameof(name));
+      Assert.ArgumentNotNull(config, nameof(config));
 
       base.Initialize(name, config);
 
@@ -226,7 +226,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <returns>The cloud BLOB container.</returns>
     public virtual CloudBlobContainer GetContainer(string containerName)
     {
-      Assert.ArgumentNotNull(containerName, "containerName");
+      Assert.ArgumentNotNull(containerName, nameof(containerName));
 
       var container = this.CloudBlobClient.GetContainerReference(containerName);
 
@@ -247,12 +247,12 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <returns>The specified cloud blob.</returns>
     public virtual ICloudBlob CreateBlob(string blobName)
     {
-      Assert.ArgumentNotNull(blobName, "blobName");
+      Assert.ArgumentNotNull(blobName, nameof(blobName));
 
       string webRoleRelativeAddress = this.GetWebsiteRelativeAddress();
 
       // Build blob name for a Role Environment using the following format: {DeploymentId}/{RoleInstanceId}/{BlobName}.
-      blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : string.Format("{0}/{1}", webRoleRelativeAddress, blobName);
+      blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : $"{webRoleRelativeAddress}/{blobName}";
 
       var blob = this.CloudBlobContainer.Exists() ?
         this.CloudBlobContainer.GetAppendBlobReference(blobName) :
@@ -269,7 +269,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <exception cref="System.NotImplementedException"></exception>
     public virtual ICloudBlob GetBlob(string blobName)
     {
-      Assert.ArgumentNotNull(blobName, "blobName");
+      Assert.ArgumentNotNull(blobName, nameof(blobName));
 
       ICloudBlob blob = this.CloudBlobContainer.Exists() ?
         this.CloudBlobContainer.GetBlobReferenceFromServer(blobName) :
@@ -287,8 +287,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <exception cref="System.NotImplementedException"></exception>
     public virtual ICloudBlob GetBlob(string containerName, string blobName)
     {
-      Assert.ArgumentNotNull(containerName, "containerName");
-      Assert.ArgumentNotNull(blobName, "blobName");
+      Assert.ArgumentNotNull(containerName, nameof(containerName));
+      Assert.ArgumentNotNull(blobName, nameof(blobName));
 
       return this.GetContainer(containerName).GetBlobReferenceFromServer(blobName);
     }
@@ -300,7 +300,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <returns>The collection of cloud blobs.</returns>
     public virtual ICollection<ICloudBlob> ListBlobs(string searchPattern)
     {
-      Assert.ArgumentNotNull(searchPattern, "searchPattern");
+      Assert.ArgumentNotNull(searchPattern, nameof(searchPattern));
 
       return this.ListBlobs(this.CloudBlobContainer, searchPattern);
     }
@@ -313,8 +313,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <returns>The collection of cloud blobs.</returns>
     public virtual ICollection<ICloudBlob> ListBlobs(string containerName, string searchPattern)
     {
-      Assert.ArgumentNotNull(containerName, "containerName");
-      Assert.ArgumentNotNull(searchPattern, "searchPattern");
+      Assert.ArgumentNotNull(containerName, nameof(containerName));
+      Assert.ArgumentNotNull(searchPattern, nameof(searchPattern));
 
       var container = this.GetContainer(containerName);
       return this.ListBlobs(container, searchPattern);
@@ -328,8 +328,8 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <returns>The collection of cloud blobs.</returns>
     public virtual ICollection<ICloudBlob> ListBlobs(CloudBlobContainer container, string searchPattern)
     {
-      Assert.ArgumentNotNull(container, "container");
-      Assert.ArgumentNotNull(searchPattern, "searchPattern");
+      Assert.ArgumentNotNull(container, nameof(container));
+      Assert.ArgumentNotNull(searchPattern, nameof(searchPattern));
 
       string webRoleRelativeAddress = this.GetWebsiteRelativeAddress();
       var blobList = container.ListBlobs(webRoleRelativeAddress, true).Cast<ICloudBlob>().ToList();

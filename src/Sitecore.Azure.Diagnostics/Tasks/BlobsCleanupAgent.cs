@@ -40,7 +40,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
     /// </summary>
     public virtual void Run()
     {
-      this.LogInfo(string.Format("Scheduling.BlobsCleanupAgent: Started. The BlobCleaner count is '{0}'.", this.blobsCleaners.Count));
+      this.LogInfo($"Scheduling.BlobsCleanupAgent: Started. The BlobCleaner count is '{this.blobsCleaners.Count}'.");
 
       foreach (IBlobCleaner cleaner in this.blobsCleaners)
       {
@@ -50,7 +50,7 @@ namespace Sitecore.Azure.Diagnostics.Tasks
         }
         catch (Exception exception)
         {
-          Log.Error(string.Format("Scheduling.BlobsCleanupAgent: Exception occurred while cleaning the '{0}' cloud blob container.", cleaner.ContainerName), exception, this);
+          Log.Error($"Scheduling.BlobsCleanupAgent: Exception occurred while cleaning the '{cleaner.ContainerName}' cloud blob container.", exception, this);
         }
       }
 
