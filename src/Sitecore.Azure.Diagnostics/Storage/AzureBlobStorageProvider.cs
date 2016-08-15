@@ -37,7 +37,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// <summary>
     /// The web apps environment variables that contains the VM's id where the site is running on.
     /// </summary>
-    private const string WebsiteInstanceIdEnvVar = "WEBSITE_INSTANCE_ID ";
+    private const string WebsiteInstanceIdEnvVar = "WEBSITE_INSTANCE_ID";
 
     /// <summary>
     /// The cloud BLOB client.
@@ -251,7 +251,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
 
       string webRoleRelativeAddress = this.GetWebsiteRelativeAddress();
 
-      // Build blob name for a Role Environment using the following format: {DeploymentId}/{RoleInstanceId}/{BlobName}.
+      // Build blob name for a Role Environment using the following format: {WebsiteName}/{WebsiteInstanceId}/{BlobName}.
       blobName = string.IsNullOrEmpty(webRoleRelativeAddress) ? blobName : $"{webRoleRelativeAddress}/{blobName}";
 
       var blob = this.CloudBlobContainer.Exists() ?
@@ -356,7 +356,7 @@ namespace Sitecore.Azure.Diagnostics.Storage
     /// Gets the WebRole relative address.
     /// </summary>
     /// <returns>
-    /// The WebRole address that includes {DeploymentId}/{RoleInstanceId}.
+    /// The WebRole address that includes {WebsiteName}/{WebsiteInstanceId}.
     /// </returns>
     protected virtual string GetWebsiteRelativeAddress()
     {
