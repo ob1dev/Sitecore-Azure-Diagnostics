@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("Sitecore® is a registered trademark of Sitecore Corporation")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyInformationalVersion("8.1 rev. 160722")]
+[assembly: AssemblyInformationalVersion("8.1 rev. 160816")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("8.1.3.5590")]
-[assembly: AssemblyFileVersion("8.1.3.5590")]
+[assembly: AssemblyVersion("8.1.3.5616")]
+[assembly: AssemblyFileVersion("8.1.3.5616")]
