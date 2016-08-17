@@ -27,3 +27,43 @@ This patch is licensed under the [MIT License](LICENSE).
 ## Download  
   
 Downloads are available via [GitHub Releases](https://github.com/olegburov/Sitecore-Azure-Diagnostics/releases).  
+
+## Instructions
+
+The recommended approach to install Sitecore Azure Diagnostics extension is as follows:
+
+1. In Visual Studio, create an empty project using the `ASP.NET Web Application (.NET Framework)` template.
+
+2. Copy the generated files on top of Sitecore 8.1 installation. 
+
+   > For example:
+   > + `\sc81u3\Sitecore.sln`
+   > + `\sc81u3\Website\Properties`
+   > + `\sc81u3\Website\packages.config`
+   > + `\sc81u3\Website\Sitecore.csproj`
+   > + `\sc81u3\Website\Sitecore.csproj.user`
+   > + `\sc81u3\Website\Web.Debug.config`
+   > + `\sc81u3\Website\Web.Release.config`
+  
+2. Install the NuGet package [Sitecore.Azure.Diagnostics](https://www.nuget.org/packages/Sitecore.Azure.Diagnostics/):
+
+   ```PowerShell
+   Install-Package Sitecore.Azure.Diagnostics
+   ```
+   
+   > **Note:** The `Sitecore.Azure.Diagnostics` package depends on the Windows Azure Storage package, which will be installed automatically.
+   
+3. Modify both files the `Web.Debug.config` and `Web.Release.config`. Under the element `\configuration\appSettings`, replace the `{account-name}` with the name of your storage account, and the `{account-key}` with your account access key:
+
+   ```XML
+   <configuration>
+   ...
+     <appSettings>
+     ...
+       <add key="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName={account-name};AccountKey={account-key}" />
+     </appSettings>
+   ...
+   </configuration>
+   ```
+
+4. Now Sitecore instance is ready to log diagnostics to an Azure Blob Storage.
