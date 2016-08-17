@@ -45,7 +45,9 @@ The recommended approach to install Sitecore Azure Diagnostics extension is as f
    > + `\sc81u3\Website\Web.Debug.config`
    > + `\sc81u3\Website\Web.Release.config`
   
-2. Install the NuGet package [Sitecore.Azure.Diagnostics](https://www.nuget.org/packages/Sitecore.Azure.Diagnostics/):
+3. Include all Sitecore's files in the project.
+
+4. Install the NuGet package [Sitecore.Azure.Diagnostics](https://www.nuget.org/packages/Sitecore.Azure.Diagnostics/):
 
    ```PowerShell
    Install-Package Sitecore.Azure.Diagnostics
@@ -53,7 +55,7 @@ The recommended approach to install Sitecore Azure Diagnostics extension is as f
    
    > **Note:** The `Sitecore.Azure.Diagnostics` package depends on the Windows Azure Storage package, which will be installed automatically.
    
-3. Modify both files the `Web.Debug.config` and `Web.Release.config`. Under the element `\configuration\appSettings`, replace the `{account-name}` with the name of your storage account, and the `{account-key}` with your account access key:
+5. Modify both files the `Web.Debug.config` and `Web.Release.config`. Under the element `\configuration\appSettings`, replace the `{account-name}` with the name of your storage account, and the `{account-key}` with your account access key:
 
    ```XML
    <configuration>
@@ -66,4 +68,4 @@ The recommended approach to install Sitecore Azure Diagnostics extension is as f
    </configuration>
    ```
 
-4. Now Sitecore instance is ready to log diagnostics to an Azure Blob Storage.
+6. Now Sitecore instance is ready to log diagnostics to an Azure Blob Storage.
